@@ -1,0 +1,112 @@
+mkdir gate
+cd gate
+
+
+##############packpages base########
+sudo apt-get install cmake cmake-curses-gui build-essential libqt4-opengl-dev qt4-qmake libqt4-dev libx11-dev libxmu-dev libxpm-dev libxft-dev 
+
+
+##############install Geant4########
+
+mkdir Geant4
+cd gate/Geant4
+wget https://distfiles.macports.org/geant4/geant4.10.05.p01.tar.gz
+mkdir build
+tar zxvf geant4.10.05.p01.tar.gz
+cd build
+ccmake ../geant4.10.05.p01
+-----geant4-use-qt =on-----
+-----geant4-use-opengl x11 =on-----
+-----geant4-install-data  =on-----
+-----CMAKE_INSTALL_PREFIX=/home/cxiao/Gate/geant4/geant4.10.05.p01-install-----
+sudo make -j20
+sudo make install 
+
+##############path environment ---Geant4##############
+vi .bashrc
+source /home/cxiao/gate/geant4/geant4.10.05.p01-install/bin/geant4.sh
+
+##############install root-6########
+sudo apt-get install git dpkg-dev cmake g++ gcc binutils libx11-dev libxpm-dev \
+libxft-dev libxext-dev
+
+sudo apt-get install gfortran libssl-dev libpcre3-dev \
+xlibmesa-glu-dev libglew1.5-dev libftgl-dev \
+libmysqlclient-dev libfftw3-dev libcfitsio-dev \
+graphviz-dev libavahi-compat-libdnssd-dev \
+libldap2-dev python-dev libxml2-dev libkrb5-dev \
+libgsl0-dev libqt4-dev
+wget https://root.cern.ch/download/root_v6.14.00.source.tar.gz
+tar zxvf root_v6.14.00.source.tar.gz
+mkdir ./root6-build 
+cd ./root6-build  
+cmake ../root-6.14.00
+sudo make -j20
+sudo make install
+
+##############path environment ---root-6##############
+vi .bashrc
+source /home/cxiao/gate/root/root6-build/bin/thisroot.sh
+
+
+##############install ITK(rtk)##############
+cd /home/cxiao/gate
+mkdir ITK
+cd ITK
+wget https://github.com/InsightSoftwareConsortium/ITK/releases/download/v5.0.1/InsightToolkit-5.0.1.tar.gz
+tar zxvf InsightToolkit-5.0.1.tar.gz
+mkdir build
+cd build
+ccmake ../InsightToolkit-5.0.1
+-------moudule-rtk=on-------
+sudo make -j20
+sudo make install 
+cd /home/cxiao/gate/ITK/InsightToolkit-5.0.1/Modules/Remote/RTK/include/
+vi rtkJosephForwardProjectionImageFilter.hxx
+-------------------------------------------
+> >> > CoordRepType lx = x - ix;
+
+> >> > CoordRepType ly = y - iy;
+
+> >> > par
+
+> >> > CoordRepType lx = itk::Math::floor(x - ix + 0.5);
+
+> >> > CoordRepType ly = itk::Math::floor(y - iy + 0.5);
+--------------------------------------------
+ccmake ../InsightToolkit-5.0.1
+sudo make -j20
+sudo make install 
+
+
+##############install xraylib##############
+cd /home/cxiao/gate
+mkdir xraylib
+cd xraylibe
+wget http://lvserver.ugent.be/xraylib/xraylib-3.3.0.tar.gz
+tar zxvf xraylib-3.3.0.tar.gz
+cd xraylib-3.3.0
+./configure
+sudo make -j20
+sudo make install
+
+
+##############install gate##############
+cd /home/cxiao/gate
+mkdir gate
+cd gate
+wget http://www.opengatecollaboration.org/sites/default/files/Gate-8.2.tar.gz
+tar zxvf Gate-8.2.tar.gz
+mkdir build
+mkdir install
+cd build
+ccmake ../Gate-8.2
+sudo make -j20
+sudo make install 
+
+##############path environment-Gate##############
+vi .bashrc
+# Gate path
+export PATH=$PATH:/home/cxiao/gate/gate/install/bin
+
+
