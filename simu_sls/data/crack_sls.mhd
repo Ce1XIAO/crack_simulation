@@ -1,0 +1,10 @@
+ObjectType = Image
+NDims = 3
+DimSize = 1001 501 1001
+ElementType = MET_UCHAR
+ElementByteOrderMSB = True
+TransformMatrix = 1 0 0 0 1 0 0 0 1
+Offset = -0.50 -0.25 -0.50
+ElementSize = 0.001 0.001 0.001
+ElementSpacing = 0.001 0.001 0.001
+ElementDataFile = crack_sls.raw
